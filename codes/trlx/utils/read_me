@@ -1,0 +1,3 @@
+from trlx.orchestrator.clppo_orchestrator import CLPPOOrchestrator
+from trlx.trainer.accelerate_clppo_trainer import AccelerateCLPPOTrainer
+add to loading.py 解决注册问题

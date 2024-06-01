@@ -1,0 +1,64 @@
+train:
+  seq_length: 550
+  epochs: 100
+  total_steps: 100000
+  batch_size: 8
+
+  checkpoint_interval: 10000
+  eval_interval: 640
+
+  pipeline: "PromptPipeline"
+  orchestrator: "HPPOOrchestrator"
+  trainer: "AccelerateHPPOTrainer"
+
+  checkpoint_dir: "ckpts/gpt2s_hppo_task-1_hp1"
+
+model:
+  model_path: "gpt2"
+  num_layers_unfrozen: 8
+
+tokenizer:
+  tokenizer_path: "gpt2"
+  truncation_side: "right"
+
+optimizer:
+  name: "adamw"
+  kwargs:
+    lr: 5.0e-6
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0.01
+
+scheduler:
+  name: "cosine_annealing"
+  kwargs:
+    T_max: 100000
+    eta_min: 5.0e-6
+
+method:
+  name: "hppoconfig"
+  num_rollouts: 512
+  chunk_size: 32
+  ppo_epochs: 4
+  init_kl_coef: 0.1
+  target: 6
+  horizon: 10000
+  gamma: 1
+  lam: 0.95
+  cliprange: 0.2
+  cliprange_value: 0.2
+  vf_coef: 0.2
+  scale_reward: False
+  ref_mean: null
+  ref_std: null
+  cliprange_reward: 10
+  reg_coef: 0.1
+  threhold: 0.85
+  expectation_coef: 1.0
+  ub: 2.5
+  lb: 0.5
+  num_steps: 1000
+  loss_type: "v1"
+  coefs_lr: 0.01
+  gen_kwargs:
+    max_new_tokens: 50
